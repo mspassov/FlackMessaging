@@ -3,8 +3,20 @@
 	<head>
 		<title>Home</title>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles_index.css') }}">
+		<script type="text/javascript" src="{{ url_for('static', filename='script_index.js') }}"></script>
+		<script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
 	</head>
 	<body>
-		<h1>Hello World!!!!!!!!</h1>
+		<h1>Flack</h1>
+
+		<form action="{{ url_for('chat') }}" method="post">
+     		<input type="text" name="user" placeholder="Username">
+     		<input type="text" name="channel" placeholder="Channel">
+        	<button>Submit</button>
+  		<form>
+		
+
+
+
 	</body>
 </html>

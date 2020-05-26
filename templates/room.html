@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Chat</title>
+		<script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function(){
+				var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+				socket.on('connect', function(){
+					socket.emit('joined_room', {
+						username: "{{ username }}",
+						channel: "{{ channel }}"
+					});
+				});
+
+				socket.on('new_user_announce', function(data){
+					let userList = document.createElement('li');
+					userList.innerHTML = `<strong>${data['username']}</strong> has joined the room`;
+					document.querySelector('#currUsers').append(userList);
+
+				})
+
+			});
+		</script>
+
+	</head>
+	<body>
+		<h1>#Channel: {{ channel }}</h1>
+		<h3>Welcome {{ username }}</h3>
+
+		<ul id="currUsers"></ul>
+
+		<form>
+			<input type="text" placeholder="Message">
+			<button>Send</button>
+		</form>
+	</body>
+</html>
