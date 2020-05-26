@@ -24,6 +24,10 @@ def joinEvent(data):
 	join_room(data['channel'])
 	socketio.emit('new_user_announce', data)
 
+@socketio.on('sent_message')
+def sendMessage(data):
+	socketio.emit('receiveMessage', data, room=data['channel'])
+
 
 if __name__ == "__main__":
 	app.run(debug=True)

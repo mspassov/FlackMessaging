@@ -7,11 +7,28 @@
 		<script>
 			document.addEventListener('DOMContentLoaded', function(){
 				var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
 				socket.on('connect', function(){
 					socket.emit('joined_room', {
 						username: "{{ username }}",
 						channel: "{{ channel }}"
 					});
+
+					
+					document.querySelector('#sendMessage').onsubmit = function(e){
+						e.preventDefault();
+						let message = document.querySelector('#message').value;
+						if(message.length > 0){
+							socket.emit('sent_message', {
+								username: "{{ username }}",
+								channel: "{{ channel }}",
+								message: message
+							})
+						}
+
+						document.querySelector('#message').value = '';
+					}
+
 				});
 
 				socket.on('new_user_announce', function(data){
@@ -20,6 +37,12 @@
 					document.querySelector('#currUsers').append(userList);
 
 				})
+
+				socket.on('receiveMessage', function(data){
+					let messageDisplay = document.createElement('li');
+					messageDisplay.innerHTML = `<strong>${data.username}</strong>: ${data.message}`;
+					document.querySelector('#currUsers').append(messageDisplay);
+				});
 
 			});
 		</script>
@@ -31,9 +54,10 @@
 
 		<ul id="currUsers"></ul>
 
-		<form>
-			<input type="text" placeholder="Message">
+		<form id="sendMessage">
+			<input id="message" type="text" placeholder="Message">
 			<button>Send</button>
 		</form>
+
 	</body>
 </html>
