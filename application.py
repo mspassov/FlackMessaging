@@ -1,23 +1,24 @@
 import os
 import requests
 
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, session
 from flask_socketio import SocketIO, emit, join_room
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
+app.secret_key = "asdfasdfas"
 
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/chat", methods=["POST"])
-def chat():
+@app.route("/chats", methods=["POST"])
+def chats():
 	username = request.form.get("user")
-	channel = request.form.get("channel")
-	return render_template("room.html", username=username, channel=channel)
+	session['username'] = username;
+	return render_template("chats.html", username=username)
 
 @socketio.on('joined_room')
 def joinEvent(data):

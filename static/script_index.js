@@ -1,16 +1,23 @@
 document.addEventListener('DOMContentLoaded', function(){
 
 	if(!localStorage.getItem('username')){
+		document.querySelector('h3').innerHTML = "It's your first time here! Please pick a Display Name: "
 
 		document.querySelector('#firstForm').onsubmit = function(){
 			let user = document.querySelector('#user_input').value;
 			localStorage.setItem('username', user);
-			document.querySelector('h3').innerHTML = `Display Name: ${user}`;
-			return false;
+			return true;
 		}
 	}
 	else{
-		document.querySelector('#user_input').remove();
-		document.querySelector('h3').innerHTML = `Display Name: ${localStorage.getItem('username')}`;
+		document.querySelector('h3').innerHTML = `Welcome Back!`;
+		document.querySelector('#user_input').value = localStorage.getItem('username');
+
+		document.querySelector('#firstForm').onsubmit = function(){
+			let user = document.querySelector('#user_input').value;
+			localStorage.setItem('username', user);
+			return true;
+		}
+		
 	}
 })
