@@ -9,11 +9,13 @@
 	<body>
 		<h1>Flack</h1>
 
-		<form action="{{ url_for('chat') }}" method="post">
-     		<input type="text" name="user" placeholder="Username">
+		<form id='firstForm' action="{{ url_for('chat') }}" method="post">
+     		<input id='user_input' type="text" name="user" placeholder="Display Name">
      		<input type="text" name="channel" placeholder="Channel">
         	<button>Submit</button>
   		<form>
+
+  		<h3></h3>
 		
 
 
