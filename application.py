@@ -1,5 +1,6 @@
 import os
 import requests
+import json
 
 from flask import Flask, render_template, jsonify, request, session
 from flask_socketio import SocketIO, emit, join_room
@@ -10,22 +11,19 @@ socketio = SocketIO(app)
 app.secret_key = "asdfasdfas"
 
 currentUsers = []
-currentChannels = []
+currentChannels = ['general', 'picker']
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+	return render_template("index.html")
 
 @app.route("/chats", methods=["POST"])
 def chats():
 	username = request.form.get("user")
 	session['username'] = username;
 
-	if username in currentUsers:
-		return "username already taken"
-	else:
-		currentUsers.append(username)
-		return render_template("chats.html", username=username)
+	currentUsers.append(username)
+	return render_template("chats.html", username=username, currentChannels=json.dumps(currentChannels))
 
 @app.route("/channels/<string:chan>")
 def channelRoom(chan):
@@ -33,7 +31,8 @@ def channelRoom(chan):
 
 @socketio.on('update_channels')
 def update_channels(data):
-	socketio.emit('display_channels', data)
+	currentChannels.append(data['channel'])
+	socketio.emit('display_channels', currentChannels)
 
 @socketio.on('joined_room')
 def joinEvent(data):

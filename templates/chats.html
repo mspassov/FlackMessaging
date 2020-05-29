@@ -8,24 +8,23 @@
 		<script type="text/javascript">
 			document.addEventListener('DOMContentLoaded', function(){
 				var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
-				var channelsArray = [];
+				var channelsArray = JSON.parse({{ currentChannels | tojson }});
 
 				socket.on('connect', function(){
-					if(!localStorage.getItem('channels')){
+					
+					if(channelsArray.length === 0){
 						document.querySelector('#existingChannels').innerHTML = "No channels yet, please create a new one!";
 						
 					}
 					else{
-						let displayChannels = JSON.parse(localStorage.getItem('channels'))
-						let length = displayChannels.length;
 
-						for(i=0; i<length; i++){
+						for(i=0; i<channelsArray.length; i++){
 							let li = document.createElement('li');
-							li.innerHTML = displayChannels[i];
+							li.innerHTML =`<a href="/channels/${channelsArray[i]}">${channelsArray[i]}</a>`;
 							document.querySelector('#existingChannels').append(li);
 						}
+						
 					}
-
 
 					document.querySelector('#channelForm').onsubmit = function(e){
 						e.preventDefault();
@@ -38,16 +37,9 @@
 				})
 
 				socket.on('display_channels', function(data){
-					let channel = data['channel'];
-					channelsArray.push(channel);
-					localStorage.setItem('channels', JSON.stringify(channelsArray));
-
-					let displayChannels = JSON.parse(localStorage.getItem('channels'))
-					let length = displayChannels.length;
-
+					let length = data.length;
 					let li = document.createElement('li');
-
-					li.innerHTML = `<a href="/channels/${displayChannels[length-1]}">${displayChannels[length-1]}</a>`;
+					li.innerHTML = `<a href="/channels/${data[length-1]}">${data[length-1]}</a>`;
 					document.querySelector('#existingChannels').append(li);
 					
 				});
