@@ -22,7 +22,7 @@ def chats():
 
 @app.route("/<string:chan>")
 def channelRoom(chan):
-	return f"Channel: {chan}"
+	return render_template('room.html', channel=chan, username=session['username'])
 
 @socketio.on('update_channels')
 def update_channels(data):
