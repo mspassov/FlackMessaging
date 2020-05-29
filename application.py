@@ -20,6 +20,14 @@ def chats():
 	session['username'] = username;
 	return render_template("chats.html", username=username)
 
+@app.route("/<string:chan>")
+def channelRoom(chan):
+	return f"Channel: {chan}"
+
+@socketio.on('update_channels')
+def update_channels(data):
+	socketio.emit('display_channels', data)
+
 @socketio.on('joined_room')
 def joinEvent(data):
 	join_room(data['channel'])

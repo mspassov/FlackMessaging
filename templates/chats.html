@@ -4,17 +4,71 @@
 		<title>Channels</title>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles_index.css') }}">
 		<script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
+
+		<script type="text/javascript">
+			document.addEventListener('DOMContentLoaded', function(){
+				var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+				var channelsArray = [];
+
+				socket.on('connect', function(){
+					if(!localStorage.getItem('channels')){
+						document.querySelector('#existingChannels').innerHTML = "No channels yet, please create a new one!";
+					}
+					else{
+						let displayChannels = JSON.parse(localStorage.getItem('channels'))
+						let length = displayChannels.length;
+
+						for(i=0; i<length; i++){
+							let li = document.createElement('li');
+							li.innerHTML = displayChannels[i];
+							document.querySelector('#existingChannels').append(li);
+						}
+					}
+
+
+					document.querySelector('#channelForm').onsubmit = function(e){
+						e.preventDefault();
+						let newChannel = document.querySelector('#channel_input').value;
+						document.querySelector('#channel_input').value = '';
+
+						socket.emit('update_channels', {channel: newChannel});
+
+					}
+				})
+
+				socket.on('display_channels', function(data){
+					let channel = data['channel'];
+					channelsArray.push(channel);
+					localStorage.setItem('channels', JSON.stringify(channelsArray));
+
+					let displayChannels = JSON.parse(localStorage.getItem('channels'))
+					let length = displayChannels.length;
+
+					let li = document.createElement('li');
+
+					li.innerHTML = `<a href="#">${displayChannels[length-1]}</a>`;
+					document.querySelector('#existingChannels').append(li);
+					
+
+				});
+
+			});
+		</script>
+
 	</head>
+
 	<body>
 		<h1>Flack - A Messaging Platform</h1>
-		<h3>Select a channel! - {{ username }}</h3>
+		<h3>{{ username }}, select a channel!</h3>
+
+		<ul id="existingChannels"></ul>
 
 		<form id='channelForm' method="post">
-     		<input id='user_input' type="text" name="user" placeholder="Channel">
+     		<input id='channel_input' type="text" name="channel" placeholder="New Channel">
         	<button>Submit</button>
-  		<form>
+  		</form>
 
-
+  		<a href="{{ url_for('channelRoom', chan='hello there test') }}">Click here</a>
 
 	</body>
 </html>
