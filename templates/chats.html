@@ -13,6 +13,7 @@
 				socket.on('connect', function(){
 					if(!localStorage.getItem('channels')){
 						document.querySelector('#existingChannels').innerHTML = "No channels yet, please create a new one!";
+						
 					}
 					else{
 						let displayChannels = JSON.parse(localStorage.getItem('channels'))
@@ -46,10 +47,9 @@
 
 					let li = document.createElement('li');
 
-					li.innerHTML = `<a href="/${displayChannels[length-1]}">${displayChannels[length-1]}</a>`;
+					li.innerHTML = `<a href="/channels/${displayChannels[length-1]}">${displayChannels[length-1]}</a>`;
 					document.querySelector('#existingChannels').append(li);
 					
-
 				});
 
 			});
@@ -67,8 +67,6 @@
      		<input id='channel_input' type="text" name="channel" placeholder="New Channel">
         	<button>Submit</button>
   		</form>
-
-  		<a href="{{ url_for('channelRoom', chan='hello there test') }}">Click here</a>
 
 	</body>
 </html>

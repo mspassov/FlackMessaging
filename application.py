@@ -9,6 +9,8 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 app.secret_key = "asdfasdfas"
 
+currentUsers = []
+currentChannels = []
 
 @app.route("/")
 def index():
@@ -18,9 +20,14 @@ def index():
 def chats():
 	username = request.form.get("user")
 	session['username'] = username;
-	return render_template("chats.html", username=username)
 
-@app.route("/<string:chan>")
+	if username in currentUsers:
+		return "username already taken"
+	else:
+		currentUsers.append(username)
+		return render_template("chats.html", username=username)
+
+@app.route("/channels/<string:chan>")
 def channelRoom(chan):
 	return render_template('room.html', channel=chan, username=session['username'])
 
