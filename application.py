@@ -11,7 +11,7 @@ socketio = SocketIO(app)
 app.secret_key = "asdfasdfas"
 
 currentUsers = []
-currentChannels = ['general', 'picker']
+currentChannels = []
 
 @app.route("/")
 def index():
@@ -27,6 +27,7 @@ def chats():
 
 @app.route("/channels/<string:chan>")
 def channelRoom(chan):
+	print(session['username'])
 	return render_template('room.html', channel=chan, username=session['username'])
 
 @socketio.on('update_channels')

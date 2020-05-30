@@ -13,7 +13,7 @@
 				socket.on('connect', function(){
 					
 					if(channelsArray.length === 0){
-						document.querySelector('#existingChannels').innerHTML = "No channels yet, please create a new one!";
+						document.querySelector('#noChannels').innerHTML = "No channels yet, please create a new one!";
 						
 					}
 					else{
@@ -37,6 +37,7 @@
 				})
 
 				socket.on('display_channels', function(data){
+					document.querySelector('#noChannels').innerHTML = '';
 					let length = data.length;
 					let li = document.createElement('li');
 					li.innerHTML = `<a href="/channels/${data[length-1]}">${data[length-1]}</a>`;
@@ -52,7 +53,7 @@
 	<body>
 		<h1>Flack - A Messaging Platform</h1>
 		<h3>{{ username }}, select a channel!</h3>
-
+		<p id="noChannels"></p>
 		<ul id="existingChannels"></ul>
 
 		<form id='channelForm' method="post">
