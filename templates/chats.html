@@ -9,7 +9,7 @@
 			document.addEventListener('DOMContentLoaded', function(){
 				var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 				var channelsArray = JSON.parse({{ currentChannels | tojson }});
-
+				var cUser = '{{ username }}';
 				socket.on('connect', function(){
 					
 					if(channelsArray.length === 0){
@@ -17,10 +17,9 @@
 						
 					}
 					else{
-
 						for(i=0; i<channelsArray.length; i++){
 							let li = document.createElement('li');
-							li.innerHTML =`<a href="/channels/${channelsArray[i]}">${channelsArray[i]}</a>`;
+							li.innerHTML =`<a href='/channels/${cUser}/${channelsArray[i]}''>${channelsArray[i]}</a>`;
 							document.querySelector('#existingChannels').append(li);
 						}
 						
@@ -32,7 +31,7 @@
 						document.querySelector('#channel_input').value = '';
 
 						socket.emit('update_channels', {channel: newChannel});
-
+						return false;
 					}
 				})
 
@@ -40,12 +39,11 @@
 					document.querySelector('#noChannels').innerHTML = '';
 					let length = data.length;
 					let li = document.createElement('li');
-					li.innerHTML = `<a href="/channels/${data[length-1]}">${data[length-1]}</a>`;
+					li.innerHTML = `<a href="/channels/${cUser}/${data[length-1]}">${data[length-1]}</a>`;
 					document.querySelector('#existingChannels').append(li);
 					
 				});
-
-			});
+			})
 		</script>
 
 	</head>
