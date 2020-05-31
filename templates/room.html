@@ -36,11 +36,13 @@
 					userList.innerHTML = `<strong>${data['username']}</strong> has joined the room`;
 					document.querySelector('#currUsers').append(userList);
 
-				})
+				});
 
 				socket.on('receiveMessage', function(data){
 					let messageDisplay = document.createElement('li');
-					messageDisplay.innerHTML = `<strong>${data.username}</strong>: ${data.message}`;
+					let dateObj = new Date();
+					let time = dateObj.getHours() + ":" + dateObj.getMinutes() + ":" + dateObj.getSeconds();
+					messageDisplay.innerHTML = `<strong>${data.username}</strong>: ${data.message} - <i>${time}</i>`;
 					document.querySelector('#currUsers').append(messageDisplay);
 				});
 
@@ -52,7 +54,11 @@
 		<h1>#Channel: {{ channel }}</h1>
 		<h3>Welcome {{ username }}</h3>
 
-		<ul id="currUsers"></ul>
+		<ul id="currUsers">
+			{% for i in chatMsgs %}
+				<li>{{ i }}</li>
+			{% endfor %}
+		</ul>
 
 		<form id="sendMessage">
 			<input id="message" type="text" placeholder="Message">

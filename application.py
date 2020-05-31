@@ -12,6 +12,7 @@ socketio = SocketIO(app)
 
 currentUsers = []
 currentChannels = []
+chatMsgs = {}
 
 @app.route("/")
 def index():
@@ -27,11 +28,12 @@ def chats():
 
 @app.route("/channels/<string:user>/<string:chan>")
 def channelRoom(user, chan):
-	return render_template('room.html', channel=chan, username=user)
+	return render_template('room.html', channel=chan, username=user, chatMsgs = chatMsgs[chan])
 
 @socketio.on('update_channels')
 def update_channels(data):
 	currentChannels.append(data['channel'])
+	chatMsgs[data['channel']] = []
 	socketio.emit('display_channels', currentChannels)
 
 @socketio.on('joined_room')
@@ -41,6 +43,11 @@ def joinEvent(data):
 
 @socketio.on('sent_message')
 def sendMessage(data):
+	if len(chatMsgs[data["channel"]]) >= 100:
+		chatMsgs[data["channel"]].pop(0)
+	
+	chatMsgs[data["channel"]].append(data['message'])
+
 	socketio.emit('receiveMessage', data, room=data['channel'])
 
 if __name__ == "__main__":
