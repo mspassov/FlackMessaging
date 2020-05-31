@@ -17,12 +17,16 @@
 					
 					document.querySelector('#sendMessage').onsubmit = function(e){
 						e.preventDefault();
+						let dateObj = new Date();
+						let time = dateObj.getHours() + ":" + dateObj.getMinutes() + ":" + dateObj.getSeconds();
 						let message = document.querySelector('#message').value;
+						let user = "{{ username }}";
+
 						if(message.length > 0){
 							socket.emit('sent_message', {
 								username: "{{ username }}",
 								channel: "{{ channel }}",
-								message: message
+								message: [user, message, time]
 							})
 						}
 
@@ -40,9 +44,10 @@
 
 				socket.on('receiveMessage', function(data){
 					let messageDisplay = document.createElement('li');
-					let dateObj = new Date();
-					let time = dateObj.getHours() + ":" + dateObj.getMinutes() + ":" + dateObj.getSeconds();
-					messageDisplay.innerHTML = `<strong>${data.username}</strong>: ${data.message} - <i>${time}</i>`;
+					let user = data['message'][0];
+					let message = data['message'][1];
+					let time = data['message'][2];
+					messageDisplay.innerHTML = `<strong>${user}</strong>: ${message} - <i>${time}</i>`;
 					document.querySelector('#currUsers').append(messageDisplay);
 				});
 
@@ -56,7 +61,7 @@
 
 		<ul id="currUsers">
 			{% for i in chatMsgs %}
-				<li>{{ i }}</li>
+				<li><strong>{{ i[0] }}</strong>: {{ i[1] }} - <i>{{ i[2] }}</i></li>
 			{% endfor %}
 		</ul>
 
@@ -64,6 +69,8 @@
 			<input id="message" type="text" placeholder="Message">
 			<button>Send</button>
 		</form>
+		<br>
+		<a href="{{ url_for('chats') }}">Go Back to Channels</a>
 
 	</body>
 </html>

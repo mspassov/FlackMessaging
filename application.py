@@ -8,7 +8,7 @@ from flask_socketio import SocketIO, emit, join_room
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
-#app.secret_key = "asdfasdfas"
+app.secret_key = "asdfasdfas"
 
 currentUsers = []
 currentChannels = []
@@ -18,13 +18,15 @@ chatMsgs = {}
 def index():
 	return render_template("index.html")
 
-@app.route("/chats", methods=["POST"])
+@app.route("/chats", methods=["POST", "GET"])
 def chats():
-	username = request.form.get("user")
-	#session['username'] = username;
 
-	currentUsers.append(username)
-	return render_template("chats.html", username=username, currentChannels=json.dumps(currentChannels))
+	if request.method == "POST":
+		username = request.form.get("user")
+		session['username'] = username
+		currentUsers.append(username)
+
+	return render_template("chats.html", username=session['username'], currentChannels=json.dumps(currentChannels))
 
 @app.route("/channels/<string:user>/<string:chan>")
 def channelRoom(user, chan):
@@ -43,7 +45,7 @@ def joinEvent(data):
 
 @socketio.on('sent_message')
 def sendMessage(data):
-	if len(chatMsgs[data["channel"]]) >= 100:
+	if len(chatMsgs[data["channel"]]) > 100:
 		chatMsgs[data["channel"]].pop(0)
 	
 	chatMsgs[data["channel"]].append(data['message'])
