@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		}
 	}
 	else{
-		document.querySelector('h3').innerHTML = `Welcome Back!`;
+		document.querySelector('h3').innerHTML = `Welcome Back, ${localStorage.getItem('username')}!`;
 		document.querySelector('#user_input').value = localStorage.getItem('username');
 
 		document.querySelector('#firstForm').onsubmit = function(){

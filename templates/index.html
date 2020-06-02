@@ -24,15 +24,28 @@
 	    		</div>
 	    	</div>
 		</nav>
-  			
+		  			
+		<div class="container">
+			<h1 class="text-center hero">Flack - A messaging Application</h1>
+			<br>
+			<p class="text-center"><strong>Flack</strong> is an anonymous web-based messaging platform which allows users to
+			create both public and private channels, and chat with anyone on the internet. Anyone can create
+			a channel with just a username!</p>
+			<h3 class="text-center"></h3>	
+			<br>
+			<form id='firstForm' action="{{ url_for('chats') }}" method="post">
+				<div class="row justify-content-center">
+					<div class="form-group col-lg-4">
+			     		<input class="form-control" id='user_input' type="text" name="user" placeholder="Display Name">
+		        	</div>
+		        	<div class="form-group col-lg-1 p-0 centerBtn">
+		        		<button class="btn btn-outline-success">Submit</button>
+	        		</div>
+        		</div>
+  			</form>
+		</div>
 
-		<h1>Flack - A messaging Application</h1>
-		<h3></h3>
-
-		<form id='firstForm' action="{{ url_for('chats') }}" method="post">
-     		<input id='user_input' type="text" name="user" placeholder="Display Name">
-        	<button>Submit</button>
-  		</form>
+		
 
 	</body>
 </html>
