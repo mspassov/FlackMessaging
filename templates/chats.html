@@ -2,7 +2,8 @@
 <html>
 	<head>
 		<title>Channels</title>
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles_index.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles_chats.css') }}">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 		<script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
 
 		<script type="text/javascript">
@@ -19,7 +20,8 @@
 					else{
 						for(i=0; i<channelsArray.length; i++){
 							let li = document.createElement('li');
-							li.innerHTML =`<a href='/channels/${cUser}/${channelsArray[i]}''>${channelsArray[i]}</a>`;
+							li.classList.add('list-group-item');
+							li.innerHTML =`<a href='/channels/${cUser}/${channelsArray[i]}''># ${channelsArray[i]}</a>`;
 							document.querySelector('#existingChannels').append(li);
 						}
 						
@@ -27,10 +29,18 @@
 
 					document.querySelector('#channelForm').onsubmit = function(e){
 						e.preventDefault();
-						let newChannel = document.querySelector('#channel_input').value;
-						document.querySelector('#channel_input').value = '';
 
-						socket.emit('update_channels', {channel: newChannel});
+						let newChannel = document.querySelector('#channel_input').value;
+
+						if(channelsArray.includes(newChannel)){
+							alert('This channel already exists!');
+							document.querySelector('#channel_input').value = '';
+						}
+						else{
+							document.querySelector('#channel_input').value = '';
+							socket.emit('update_channels', {channel: newChannel});
+						}
+						
 						return false;
 					}
 				})
@@ -39,7 +49,8 @@
 					document.querySelector('#noChannels').innerHTML = '';
 					let length = data.length;
 					let li = document.createElement('li');
-					li.innerHTML = `<a href="/channels/${cUser}/${data[length-1]}">${data[length-1]}</a>`;
+					li.classList.add('list-group-item');
+					li.innerHTML = `<a href="/channels/${cUser}/${data[length-1]}"># ${data[length-1]}</a>`;
 					document.querySelector('#existingChannels').append(li);
 					
 				});
@@ -49,15 +60,42 @@
 	</head>
 
 	<body>
-		<h1>Flack - A Messaging Platform</h1>
-		<h3>{{ username }}, select a channel!</h3>
-		<p id="noChannels"></p>
-		<ul id="existingChannels"></ul>
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<a class="navbar-brand" href="#">
+				<img src="{{ url_for('static', filename='globeIcon.png') }}" width="30" height="30" class="d-inline-block align-center" alt="" loading="lazy">
+				Flack
+			</a>
+		    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+		    	<span class="navbar-toggler-icon"></span>
+		    </button>
+	    	<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+		    	<div class="navbar-nav">
+		    		<a class="nav-item nav-link" href="{{ url_for('index') }}">Home</a>
+			        <a class="nav-item nav-link active" href="#">Channels <span class="sr-only">(current)</span></a>
+			        <a class="nav-item nav-link" href="#">About</a>
+			        <a class="nav-item nav-link" href="#">Code</a>
+	    		</div>
+	    	</div>
+		</nav>
 
-		<form id='channelForm' method="post">
-     		<input id='channel_input' type="text" name="channel" placeholder="New Channel">
-        	<button>Submit</button>
-  		</form>
+		<div class="container">
+			<h2 class="text-center">{{ username }}, select a channel:</h2>
+			<p class="text-center" id="noChannels"></p>
+			<ul class="text-center list-group" id="existingChannels"></ul>
+			<br>
 
+			<form id='channelForm' method="post">
+				<div class="row justify-content-center">
+					<div class="form-group col-lg-4">
+		     			<input class="form-control" id='channel_input' type="text" name="channel" placeholder="New Channel">
+		     		</div>
+		     		<div class="form-group col-lg-1 p-0 centerBtn">
+		        		<button class="btn btn-outline-success">Submit</button>
+		        	</div>
+	        	</div>
+	  		</form>
+
+
+  		</div>
 	</body>
 </html>
