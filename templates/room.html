@@ -4,6 +4,7 @@
 		<title>Chat</title>
 		<script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles_room.css') }}">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 		<script>
 			document.addEventListener('DOMContentLoaded', function(){
@@ -76,7 +77,6 @@
 	    	<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 		    	<div class="navbar-nav">
 		    		<a class="nav-item nav-link" href="{{ url_for('index') }}">Home</a>
-			        <a class="nav-item nav-link active" href="#">{{ channel }} <span class="sr-only">(current)</span></a>
 			        <a class="nav-item nav-link" href="#">About</a>
 			        <a class="nav-item nav-link" href="#">Code</a>
 	    		</div>
@@ -98,6 +98,65 @@
 		</form>
 		<br>
 		<a href="{{ url_for('chats') }}">Go Back to Channels</a>
+
+		<div class="container-fluid h-100">
+			<div class="row justify-content-center h-100">
+				<div class="col-md-8 col-xl-6 chat">
+					<div class="card">
+						<div class="card-header msg_head">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="{{ url_for('static', filename='person.jpg') }}" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>General!</span> <!-- Channel name can go here-->
+									<p>1767 Messages</p> <!-- This is where we can put the # of messages-->
+								</div>
+								
+							</div>
+						</div>
+						<div class="card-body msg_card_body">
+							<div class="d-flex justify-content-start mb-4">
+								<div class="img_cont_msg">
+									<img src="{{ url_for('static', filename='person.jpg') }}" class="rounded-circle user_img_msg">
+								</div>
+								<div class="msg_cotainer">
+									Hi, how are you samim?
+									<span class="msg_time">8:40 AM, Today</span>
+								</div>
+							</div>
+							<div class="d-flex justify-content-end mb-4">
+								<div class="msg_cotainer_send">
+									Hi Khalid i am good tnx how about you?
+									<span class="msg_time_send">8:55 AM, Today</span>
+								</div>
+								<div class="img_cont_msg">
+									<img src="{{ url_for('static', filename='person.jpg') }}" class="rounded-circle user_img_msg">
+								</div>
+							</div>
+						</div>
+						<div class="card-footer">
+							<div class="input-group">
+								<!--
+								<div class="input-group-append">
+									<span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
+								</div> -->
+								
+								<textarea name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
+								<div class="input-group-append">
+									<span class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
 
 	</body>
 </html>
