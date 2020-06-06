@@ -51,7 +51,7 @@
 					let message = data['message'][1];
 					let time = data['message'][2];
 					if(localUser === user){
-						messageDisplay.innerHTML = `****<strong>${user}</strong>: ${message} - <i>${time}</i>`;
+						messageDisplay.innerHTML = `<strong>${user}</strong>: ${message} - <i>${time}</i>`;
 					}
 					else{
 						messageDisplay.innerHTML = `<strong>${user}</strong>: ${message} - <i>${time}</i>`;
@@ -83,12 +83,15 @@
 	    	</div>
 		</nav>
 
-		<h1>#Channel: {{ channel }}</h1>
-		<h3>Welcome {{ username }}</h3>
+		<h1>Welcome {{ username }}!</h1>
 
 		<ul id="currUsers">
 			{% for i in chatMsgs %}
-				<li><strong>{{ i[0] }}</strong>: {{ i[1] }} - <i>{{ i[2] }}</i></li>
+				{% if i[0] == username %}
+					<li><strong>{{ i[0] }}!!!</strong>: {{ i[1] }} - <i>{{ i[2] }}</i></li>
+				{% else %}
+					<li><strong>{{ i[0] }}</strong>: {{ i[1] }} - <i>{{ i[2] }}</i></li>
+				{% endif %}
 			{% endfor %}
 		</ul>
 
@@ -97,7 +100,7 @@
 			<button>Send</button>
 		</form>
 		<br>
-		<a href="{{ url_for('chats') }}">Go Back to Channels</a>
+		
 
 		<div class="container-fluid h-100">
 			<div class="row justify-content-center h-100">
@@ -110,32 +113,39 @@
 									<span class="online_icon"></span>
 								</div>
 								<div class="user_info">
-									<span>General!</span> <!-- Channel name can go here-->
+									<span>#{{ channel }}</span> <!-- Channel name can go here-->
 									<p>1767 Messages</p> <!-- This is where we can put the # of messages-->
 								</div>
 								
 							</div>
 						</div>
+
 						<div class="card-body msg_card_body">
-							<div class="d-flex justify-content-start mb-4">
-								<div class="img_cont_msg">
-									<img src="{{ url_for('static', filename='person.jpg') }}" class="rounded-circle user_img_msg">
-								</div>
-								<div class="msg_cotainer">
-									Hi, how are you samim?
-									<span class="msg_time">8:40 AM, Today</span>
-								</div>
-							</div>
-							<div class="d-flex justify-content-end mb-4">
-								<div class="msg_cotainer_send">
-									Hi Khalid i am good tnx how about you?
-									<span class="msg_time_send">8:55 AM, Today</span>
-								</div>
-								<div class="img_cont_msg">
-									<img src="{{ url_for('static', filename='person.jpg') }}" class="rounded-circle user_img_msg">
-								</div>
-							</div>
+							{% for i in chatMsgs %}
+								{% if i[0] == username %}
+									<div class="d-flex justify-content-end mb-4">
+										<div class="msg_cotainer_send">
+											{{ i[1] }}
+											<span class="msg_time_send">{{ i[2] }}</span>
+										</div>
+										<div class="img_cont_msg">
+											<img src="{{ url_for('static', filename='person.jpg') }}" class="rounded-circle user_img_msg">
+										</div>
+									</div>
+								{% else %}
+									<div class="d-flex justify-content-start mb-4">
+										<div class="img_cont_msg">
+											<img src="{{ url_for('static', filename='person.jpg') }}" class="rounded-circle user_img_msg">
+										</div>
+										<div class="msg_cotainer">
+											{{ i[1] }}
+											<span class="msg_time">{{ i[2] }}</span>
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
 						</div>
+
 						<div class="card-footer">
 							<div class="input-group">
 								<!--
@@ -145,7 +155,7 @@
 								
 								<textarea name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
 								<div class="input-group-append">
-									<span class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+									<span class="input-group-text send_btn"><a href="www.google.com"><i class="fas fa-location-arrow icon_arrow"></i></a></span>
 								</div>
 							</div>
 						</div>
@@ -154,9 +164,7 @@
 			</div>
 		</div>
 
-
-
-
-
+		<a href="{{ url_for('chats') }}">Go Back to Channels</a>
+		<a href="" style="text-decoration: none !important;">hello</a>
 	</body>
 </html>
