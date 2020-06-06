@@ -1,0 +1,18 @@
+.container{
+	margin-top: 50px;
+}
+
+#noChannels{
+	margin-top: 15px;
+}
+
+ul{
+	list-style-type: none;
+	margin-right: 35%;
+	margin-left: 35%;
+}
+
+.centerBtn{
+	text-align: center;
+
+}
