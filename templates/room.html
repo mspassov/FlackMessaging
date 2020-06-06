@@ -50,8 +50,9 @@
 					let user = data['message'][0];
 					let message = data['message'][1];
 					let time = data['message'][2];
+
 					if(localUser === user){
-						messageDisplay.innerHTML = `<strong>${user}</strong>: ${message} - <i>${time}</i>`;
+						messageDisplay.innerHTML = `***<strong>${user}</strong>: ${message} - <i>${time}</i>`;
 					}
 					else{
 						messageDisplay.innerHTML = `<strong>${user}</strong>: ${message} - <i>${time}</i>`;
@@ -94,12 +95,6 @@
 				{% endif %}
 			{% endfor %}
 		</ul>
-
-		<form id="sendMessage">
-			<input id="message" type="text" placeholder="Message">
-			<button>Send</button>
-		</form>
-		<br>
 		
 
 		<div class="container-fluid h-100">
@@ -147,17 +142,20 @@
 						</div>
 
 						<div class="card-footer">
-							<div class="input-group">
-								<!--
-								<div class="input-group-append">
-									<span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
-								</div> -->
+							<form id="sendMessage">
+								<div class="input-group">
+									<!--
+									<div class="input-group-append">
+										<span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
+									</div> -->
 								
-								<textarea name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
-								<div class="input-group-append">
-									<span class="input-group-text send_btn"><a href="www.google.com"><i class="fas fa-location-arrow icon_arrow"></i></a></span>
+										<textarea id="message" name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
+										<div class="input-group-append">
+											<span class="input-group-text send_btn"><button><i class="fas fa-location-arrow icon_arrow"></button></i></span>
+										</div>
+						
 								</div>
-							</div>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -165,6 +163,6 @@
 		</div>
 
 		<a href="{{ url_for('chats') }}">Go Back to Channels</a>
-		<a href="" style="text-decoration: none !important;">hello</a>
+
 	</body>
 </html>
