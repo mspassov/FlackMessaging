@@ -38,6 +38,7 @@
 						}
 						else{
 							document.querySelector('#channel_input').value = '';
+							channelsArray.push(newChannel);
 							socket.emit('update_channels', {channel: newChannel});
 						}
 						
@@ -73,7 +74,7 @@
 		    		<a class="nav-item nav-link" href="{{ url_for('index') }}">Home</a>
 			        <a class="nav-item nav-link active" href="#">Channels <span class="sr-only">(current)</span></a>
 			        <a class="nav-item nav-link" href="#">About</a>
-			        <a class="nav-item nav-link" href="#">Code</a>
+			        <a class="nav-item nav-link" href="https://github.com/mspassov/FlackMessaging">Code</a>
 	    		</div>
 	    	</div>
 		</nav>

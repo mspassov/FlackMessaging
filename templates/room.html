@@ -38,28 +38,49 @@
 				});
 
 				socket.on('new_user_announce', function(data){
-					let userList = document.createElement('li');
-					userList.innerHTML = `<strong>${data['username']}</strong> has joined the room`;
-					document.querySelector('#currUsers').append(userList);
+					let userList = document.createElement('div');
+					userList.innerHTML = `<div class="d-flex justify-content-center mb-4">
+											<p><strong>${data['username']}</strong> has joined the channel</p>
+										</div>`;
+					document.querySelector('#msgBox').append(userList);
 
 				});
 
 				socket.on('receiveMessage', function(data){
-					let messageDisplay = document.createElement('li');
+					let messageDisplay = document.createElement('div');
 					let localUser = '{{ username }}';
 					let user = data['message'][0];
 					let message = data['message'][1];
 					let time = data['message'][2];
 
 					if(localUser === user){
-						messageDisplay.innerHTML = `***<strong>${user}</strong>: ${message} - <i>${time}</i>`;
+						messageDisplay.innerHTML = `<div class="d-flex justify-content-end mb-4">
+														<div class="msg_cotainer_send">
+															<strong>${user}</strong>: ${message}
+															<span class="msg_time_send">${time}</span>
+														</div>
+														<div class="img_cont_msg">
+															<img src="https://ui-avatars.com/api/?name=${user}&background=bfffd0&length=2&bold=true&color=636363" class="rounded-circle user_img_msg">
+														</div>
+													</div>`;
 					}
 					else{
-						messageDisplay.innerHTML = `<strong>${user}</strong>: ${message} - <i>${time}</i>`;
+						messageDisplay.innerHTML = `<div class="d-flex justify-content-start mb-4">
+														<div class="img_cont_msg">
+															<img src="https://ui-avatars.com/api/?name=${user}&background=c7e0fc&length=2&bold=true" class="rounded-circle user_img_msg">
+														</div>
+														<div class="msg_cotainer">
+															<strong>${user}</strong>: ${message}
+															<span class="msg_time">${time}</span>
+														</div>
+													</div>`;
 					}
 
-					
-					document.querySelector('#currUsers').append(messageDisplay);
+					document.querySelector('#msgBox').append(messageDisplay);
+					let numMsgs = 0;
+					numMsgs = parseInt(document.querySelector('#numMsgs').innerHTML) + 1;
+					document.querySelector('#numMsgs').innerHTML = `${numMsgs} Messages`;
+
 				});
 
 			});
@@ -79,24 +100,15 @@
 		    	<div class="navbar-nav">
 		    		<a class="nav-item nav-link" href="{{ url_for('index') }}">Home</a>
 			        <a class="nav-item nav-link" href="#">About</a>
-			        <a class="nav-item nav-link" href="#">Code</a>
+			        <a class="nav-item nav-link" href="https://github.com/mspassov/FlackMessaging">Code</a>
 	    		</div>
 	    	</div>
 		</nav>
-
-		<h1>Welcome {{ username }}!</h1>
-
-		<ul id="currUsers">
-			{% for i in chatMsgs %}
-				{% if i[0] == username %}
-					<li><strong>{{ i[0] }}!!!</strong>: {{ i[1] }} - <i>{{ i[2] }}</i></li>
-				{% else %}
-					<li><strong>{{ i[0] }}</strong>: {{ i[1] }} - <i>{{ i[2] }}</i></li>
-				{% endif %}
-			{% endfor %}
-		</ul>
+		<div class="container hero">
+			<h1>Welcome {{ username }}!</h1><br>
+			<a href="{{ url_for('chats') }}" class="back"><button type="button" class="btn btn-outline-secondary">Back to Channels</button></a>
+		</div>
 		
-
 		<div class="container-fluid h-100">
 			<div class="row justify-content-center h-100">
 				<div class="col-md-8 col-xl-6 chat">
@@ -104,36 +116,37 @@
 						<div class="card-header msg_head">
 							<div class="d-flex bd-highlight">
 								<div class="img_cont">
-									<img src="{{ url_for('static', filename='person.jpg') }}" class="rounded-circle user_img">
+									<img src="{{ url_for('static', filename='message.png') }}" class="rounded-circle user_img">
 									<span class="online_icon"></span>
 								</div>
 								<div class="user_info">
-									<span>#{{ channel }}</span> <!-- Channel name can go here-->
-									<p>1767 Messages</p> <!-- This is where we can put the # of messages-->
+									<span>#{{ channel }}</span>
+									<p id="numMsgs">{{ chatMsgs|length }} Messages</p>
 								</div>
 								
 							</div>
 						</div>
 
-						<div class="card-body msg_card_body">
+						<div id="msgBox" class="card-body msg_card_body">
+							
 							{% for i in chatMsgs %}
 								{% if i[0] == username %}
 									<div class="d-flex justify-content-end mb-4">
 										<div class="msg_cotainer_send">
-											{{ i[1] }}
+											<strong>{{ i[0] }}: </strong>{{ i[1] }}
 											<span class="msg_time_send">{{ i[2] }}</span>
 										</div>
 										<div class="img_cont_msg">
-											<img src="{{ url_for('static', filename='person.jpg') }}" class="rounded-circle user_img_msg">
+											<img src="https://ui-avatars.com/api/?name={{ username }}&background=bfffd0&length=2&bold=true&color=636363" class="rounded-circle user_img_msg">
 										</div>
 									</div>
 								{% else %}
 									<div class="d-flex justify-content-start mb-4">
 										<div class="img_cont_msg">
-											<img src="{{ url_for('static', filename='person.jpg') }}" class="rounded-circle user_img_msg">
+											<img src="https://ui-avatars.com/api/?name={{ i[0] }}&background=c7e0fc&length=2&bold=true" class="rounded-circle user_img_msg">
 										</div>
 										<div class="msg_cotainer">
-											{{ i[1] }}
+											{{i[0]}}: {{ i[1] }}
 											<span class="msg_time">{{ i[2] }}</span>
 										</div>
 									</div>
@@ -144,16 +157,10 @@
 						<div class="card-footer">
 							<form id="sendMessage">
 								<div class="input-group">
-									<!--
+									<textarea id="message" name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
 									<div class="input-group-append">
-										<span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
-									</div> -->
-								
-										<textarea id="message" name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
-										<div class="input-group-append">
-											<span class="input-group-text send_btn"><button><i class="fas fa-location-arrow icon_arrow"></button></i></span>
-										</div>
-						
+										<span class="input-group-text send_btn"><button class="sendBtn"><i class="fas fa-location-arrow icon_arrow"></button></i></span>
+									</div>
 								</div>
 							</form>
 						</div>
@@ -161,8 +168,6 @@
 				</div>
 			</div>
 		</div>
-
-		<a href="{{ url_for('chats') }}">Go Back to Channels</a>
 
 	</body>
 </html>
