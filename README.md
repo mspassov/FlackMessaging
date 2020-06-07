@@ -1,6 +1,8 @@
 # Flack Messaging Application
 
-Flack is a web-based messaging platform, where users can create a username, a channel, and connect with anyone. All channels are public, thus anyone can enter and start chatting. An unlimited number of channels can be created, and there is no limit to how many users can be in each channel. Each person's avatar is generated via their username, and a person's profile is remembered once a profile is created.
+Flack is a web-based messaging platform, where users can create a username, a channel, and connect with anyone. All channels are public, thus anyone can enter and start chatting. An unlimited number of channels can be created, and there is no limit to how many users can be in each channel. Each person's avatar is generated via their username, and a person's profile is remembered once a profile is created. The goal of this application is to mimic the functionalities of Slack and Microsoft Teams.
+
+This project is inspired by Harvard's CS50 EdX course, which provided me the foundation to create the application. 
 
 <b>Demo: </b> https://www.youtube.com/watch?v=AgqMmkrSHmk
 <br>
